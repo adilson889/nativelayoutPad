@@ -24,14 +24,15 @@ button,select{font:inherit;color:inherit}
 .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px;color:#E6EDF3;margin-right:auto}
 .brand b{color:#3FB950}
 .brand a{display:flex}
-.sv{color:#8B949E;font-size:12.5px;min-width:64px;text-align:right}
+.sv{color:#8B949E;font-size:12.5px;white-space:nowrap}
 .sv.bad{color:#F85149;cursor:help}
 .btn{background:#21262D;border:1px solid #30363D;border-radius:8px;padding:7px 12px;cursor:pointer;min-height:36px}
 .btn:hover{border-color:#8B949E}
 .btn.on{background:#1F6FEB;border-color:#1F6FEB;color:#fff}
 .btn.go{background:#238636;border-color:#2EA043;color:#fff;font-weight:600}
 .btn.danger{background:#DA3633;border-color:#F85149;color:#fff;font-weight:600}
-select.btn{padding-right:6px}
+select.btn{padding-right:6px;max-width:100%}
+.acts{display:flex;align-items:center;gap:10px}
 .main{flex:1;min-height:0;display:flex}
 .pane{display:flex;flex-direction:column;min-width:0;min-height:0}
 .ed{flex:1.1;border-right:1px solid #30363D}
@@ -103,22 +104,30 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
   body[data-v=code] .pv{display:none}
   body[data-v=view] .ed{display:none}
   .phone{max-height:none}
+  .bar{gap:8px 10px}
+  .brand{flex:1 1 auto;min-width:0}
+  .acts{flex:1 1 100%;gap:8px}
+  .acts .btn{flex:1 1 0;min-width:0;padding:7px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .acts select.btn{flex:1.4 1 0}
 }
 </style>
 </head>
 <body data-v="code">
-  <div class="brand"><a href="../" title="nativelayout"><svg width="30" height="30" viewBox="3 3 94 94"><defs><filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="-3" dy="-3" stdDeviation="3" flood-color="#ffffff" flood-opacity=".9"/><feDropShadow dx="4" dy="5" stdDeviation="4" flood-color="#000" flood-opacity=".5"/></filter></defs><rect x="10" y="10" width="80" height="80" rx="24" fill="#DFE4EB" filter="url(#sh)"/><g transform="translate(50 50) scale(1.55) translate(-51 -49.8)"><path fill="#44546A" d="M35 66.7V42.2h6.2v2.4c1.4-1.9 4.3-3 7.1-3 6.2 0 10.2 3.7 10.2 9.9v15.2h-6.2V52.5c0-3.1-1.8-5.1-4.6-5.1-3.9 0-6.5 2.2-6.5 6V66.7z"/><rect x="61.8" y="32.9" width="6.1" height="33.8" fill="#0C8F65"/></g></svg></a><span>native<b>layout</b>Pad</span></div>
-  <span id="sv" class="sv"></span>
-  <select id="ex" class="btn" aria-label="Examples"></select>
-  <button id="dark" class="btn" title="Preview with the dark theme">Dark</button>
-  <button id="share" class="btn">Share</button>
-  <button id="run" class="btn go">Run</button>
+<div class="bar">
+  <div class="brand" translate="no"><a href="../" title="nativelayout"><svg width="30" height="30" viewBox="3 3 94 94"><defs><filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="-3" dy="-3" stdDeviation="3" flood-color="#ffffff" flood-opacity=".9"/><feDropShadow dx="4" dy="5" stdDeviation="4" flood-color="#000" flood-opacity=".5"/></filter></defs><rect x="10" y="10" width="80" height="80" rx="24" fill="#DFE4EB" filter="url(#sh)"/><g transform="translate(50 50) scale(1.55) translate(-51 -49.8)"><path fill="#44546A" d="M35 66.7V42.2h6.2v2.4c1.4-1.9 4.3-3 7.1-3 6.2 0 10.2 3.7 10.2 9.9v15.2h-6.2V52.5c0-3.1-1.8-5.1-4.6-5.1-3.9 0-6.5 2.2-6.5 6V66.7z"/><rect x="61.8" y="32.9" width="6.1" height="33.8" fill="#0C8F65"/></g></svg></a><span>native<b>layout</b>Pad</span></div>
+  <span id="sv" class="sv" translate="no"></span>
+  <div class="acts">
+    <select id="ex" class="btn" aria-label="Examples"></select>
+    <button id="dark" class="btn" title="Preview with the dark theme">Dark</button>
+    <button id="share" class="btn">Share</button>
+    <button id="run" class="btn go">Run</button>
+  </div>
 </div>
 <div class="tabs mtabs" id="mt"><div class="tab on" data-v="code">Code</div><div class="tab" data-v="view">Preview</div></div>
 <div class="main">
   <div class="pane ed">
-    <div class="tabs" id="tabs"></div>
-    <div class="code">
+    <div class="tabs" id="tabs" translate="no"></div>
+    <div class="code" translate="no">
       <div class="gut" id="gut"></div>
       <div class="edw">
         <pre class="hl" id="hl" aria-hidden="true"><code id="hlc"></code></pre>
@@ -627,15 +636,54 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
 
   // ---------- header buttons ----------
   var ex = $('ex');
-  ex.innerHTML = '<option value="">Examples</option>' + Object.keys(EXAMPLES).map(function (k) { return '<option>' + k + '</option>'; }).join('');
+  var EXDIR = 'exemplos/';
+  var DEFAULT_FILES = ['screen.nl', 'theme.css', 'data.json'];
+  var catalog = [];
+  function okName(n) { return typeof n === 'string' && /^[\w.\-\/]+\.(nl|css|json)$/i.test(n) && n.indexOf('..') < 0 && n.charAt(0) !== '/'; }
+  function fallbackCatalog() { return Object.keys(EXAMPLES).map(function (k) { return { name: k, builtin: true }; }); }
+  function fillSelect() {
+    ex.innerHTML = '<option value="">Examples</option>' + catalog.map(function (e, i) { return '<option value="' + i + '">' + esc(e.name) + '</option>'; }).join('');
+  }
+  // reads exemplos/index.json; if it cannot be read, the examples built into this page are used
+  function loadCatalog() {
+    return fetch(EXDIR + 'index.json')
+      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then(function (list) {
+        if (!Array.isArray(list)) throw new Error('index');
+        var good = list.filter(function (e) { return e && typeof e.name === 'string' && typeof e.folder === 'string' && e.folder.indexOf('..') < 0 && !/^\/|:/.test(e.folder); });
+        if (!good.length) throw new Error('empty');
+        catalog = good;
+      })
+      .catch(function () { catalog = fallbackCatalog(); })
+      .then(fillSelect);
+  }
+  function fetchExample(e) {
+    if (e.builtin) return Promise.resolve(clone(EXAMPLES[e.name]));
+    var names = (Array.isArray(e.files) && e.files.length ? e.files : DEFAULT_FILES).filter(okName);
+    var base = EXDIR + e.folder.replace(/\/+$/, '') + '/';
+    return Promise.all(names.map(function (n) {
+      return fetch(base + n).then(function (r) { return r.ok ? r.text() : null; }).catch(function () { return null; });
+    })).then(function (texts) {
+      var got = {}, files = {};
+      names.forEach(function (n, i) { if (texts[i] !== null) got[n] = texts[i]; });
+      if (got[MAIN] === undefined) throw new Error('screen.nl not found');
+      files[MAIN] = got[MAIN];
+      Object.keys(got).forEach(function (n) { if (n !== MAIN) files[n] = got[n]; });
+      return files;
+    });
+  }
   ex.onchange = function () {
-    var name = ex.value;
+    var i = ex.value, e = catalog[Number(i)];
     ex.value = '';
-    if (!name) return;
-    dialog({ title: 'Load example', message: 'Replace the current files with the "' + name + '" example?', ok: 'Replace', danger: true }).then(function (yes) {
+    if (i === '' || !e) return;
+    dialog({ title: 'Load example', message: 'Replace the current files with the "' + e.name + '" example?', ok: 'Replace', danger: true }).then(function (yes) {
       if (!yes) return;
-      st.files = clone(EXAMPLES[name]); st.cur = MAIN; st.pos = {};
-      drawTabs(); show(); save(); run();
+      return fetchExample(e).then(function (files) {
+        st.files = files; ensureFixed(); st.cur = MAIN; st.pos = {};
+        drawTabs(); show(); save(); run();
+      }, function () {
+        return dialog({ title: 'Could not load example', message: 'The files of "' + e.name + '" could not be loaded. Check exemplos/index.json and the name of the folder.', cancel: false });
+      });
     });
   };
   $('dark').onclick = function () { st.dark = !st.dark; this.classList.toggle('on', st.dark); save(); run(); };
@@ -657,6 +705,7 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
   // ---------- start ----------
   function init() {
     sset('nlpad.test', '1');
+    var catalogP = loadCatalog();
     var stored = loadStored(), shared = readHash(), p = Promise.resolve();
     if (shared) {
       p = (stored && JSON.stringify(stored.files) !== JSON.stringify(shared)
@@ -667,7 +716,9 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
           else applyData(stored);
         });
     } else if (stored) applyData(stored);
-    else applyData({ files: clone(EXAMPLES.Tasks), cur: MAIN, dark: false, view: 'code', pos: {} });
+    else p = catalogP.then(function () { return fetchExample(catalog[0]); })
+      .catch(function () { return clone(EXAMPLES.Tasks); })
+      .then(function (f) { applyData({ files: f, cur: MAIN, dark: false, view: 'code', pos: {} }); });
     return p;
   }
   init().then(function () {

@@ -160,7 +160,7 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
   var $ = function (id) { return document.getElementById(id); };
   var ta = $('ta'), hlc = $('hlc'), hlBox = $('hl'), gut = $('gut'), tabs = $('tabs'), probs = $('probs'), fr = $('fr'), sv = $('sv');
   var st = { files: {}, cur: MAIN, dark: false, view: 'code', pos: {}, problems: [] };
-  var timer = null, saveTimer = null, storageOk = true;
+  var timer = null, saveTimer = null, storageOk = true, ready = false;
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
 
@@ -408,12 +408,14 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
   }
   function flush() {
     clearTimeout(saveTimer);
+    if (!ready || st.files[MAIN] === undefined) return;
     savePos();
     var ok = sset(KEY, JSON.stringify({ files: st.files, cur: st.cur, dark: st.dark, view: st.view, pos: st.pos }));
     setSaved(ok);
   }
-  function save() { setSaved(null); clearTimeout(saveTimer); saveTimer = setTimeout(flush, 250); }
+  function save() { if (!ready) return; setSaved(null); clearTimeout(saveTimer); saveTimer = setTimeout(flush, 100); }
   window.addEventListener('pagehide', flush);
+  window.addEventListener('beforeunload', flush);
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(); });
 
   function ensureFixed() {
@@ -434,7 +436,9 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
       var old = sget('nlpad.files');
       if (old) { try { f = JSON.parse(old); if (f && f[MAIN] !== undefined) d = { files: f, dark: sget('nlpad.dark') === '1' }; } catch (e) {} }
     }
-    return (d && d.files && typeof d.files === 'object' && d.files[MAIN] !== undefined) ? d : null;
+    var good = d && d.files && typeof d.files === 'object' && d.files[MAIN] !== undefined;
+    if (raw && !good) sset(KEY + '.bak', raw);
+    return good ? d : null;
   }
 
   // ---------- share links ----------
@@ -724,8 +728,13 @@ textarea::selection{background:rgba(56,139,253,.4);-webkit-text-fill-color:trans
   init().then(function () {
     $('dark').classList.toggle('on', st.dark);
     drawTabs(); show(); setView(st.view);
+    ready = true;
     if (!storageOk) { setSaved(false); toast('Browser storage is blocked: files will not be kept'); }
-    else flush();
+    else {
+      flush();
+      // ask the browser not to clear the saved files when it needs space
+      try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+    }
     if (window.nlRender) run(); else window.addEventListener('load', run);
   });
 })();

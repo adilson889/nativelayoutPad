@@ -1,0 +1,8 @@
+body  { background: #0D1117; color: #C9D1D9; padding: 1.25rem; gap: 1rem; }
+h1    { margin: 0; font-size: 1.75rem; font-weight: bold; }
+.tile { background: #161B22; border: 1px solid #30363D; border-radius: 0.75rem; padding: 1.5rem; }
+.badge {
+    position: absolute; top: 0.5rem; right: 0.5rem; z-index: 2;
+    background: #F85149; color: #FFFFFF; font-weight: bold;
+    border-radius: 1rem; padding: 0.25rem;
+}

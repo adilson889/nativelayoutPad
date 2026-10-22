@@ -19,7 +19,6 @@ jobs:
           repository: adilson889/nativelayout
           ref: main
           path: nativelayout
-          token: ${{ secrets.NL_TOKEN }}
 
       - uses: actions/setup-java@v4
         with:

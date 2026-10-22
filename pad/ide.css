@@ -72,10 +72,21 @@ textarea::selection{background:rgba(38,79,120,.8)}
   .main{flex-direction:column}
   .splitter{display:none}
   .mtabs{display:none}
-  .si:not(.first):not(#pos):not(#eng){display:none}
+  .si:not(.first):not(#pos):not(#eng):not(#fill){display:none}
   .bar select.btn{flex:none}
   .brand{flex:1}
 }
 .sv{color:#fff;font-size:12px}
 .si.first:has(.sv.bad){background:#c72e2e}
 .sv.bad{color:#fff;font-weight:700}
+/* dados em falta */
+.si[hidden]{display:none}
+.si.fill,button.si{background:#0e639c;border:0;color:#fff;font:inherit;font-size:12px;cursor:pointer;max-width:55vw;overflow:hidden;text-overflow:ellipsis}
+button.si:hover{background:#1177bb}
+.vdlg{max-height:88vh;display:flex;flex-direction:column;max-width:440px}
+.vbody{overflow:auto;min-height:0;display:flex;flex-direction:column;gap:8px;margin:6px 0}
+.vgroup{display:flex;flex-direction:column;gap:6px}
+.vh{color:var(--mut);font-size:12.5px}
+.vrow{display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--mut)}
+.vrow input,.vrow select{background:#3c3c3c;border:1px solid #3c3c3c;border-radius:4px;color:var(--fg);padding:7px 8px;font:inherit;font-size:14px;outline:0}
+.vrow input:focus,.vrow select:focus{border-color:var(--acc)}

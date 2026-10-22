@@ -1,4 +1,14 @@
 [
-  { "name": "Tasks", "folder": "tasks" },
-  { "name": "Hello", "folder": "hello" }
+  {
+    "name": "Tasks",
+    "folder": "tasks"
+  },
+  {
+    "name": "Hello",
+    "folder": "hello"
+  },
+  {
+    "name": "Absolute",
+    "folder": "absolute"
+  }
 ]

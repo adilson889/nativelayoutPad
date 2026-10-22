@@ -437,9 +437,10 @@
     'input[type=checkbox]{width:1.3rem;height:1.3rem}' +
     'header{position:sticky;top:0;z-index:5;flex-direction:row;align-items:center}footer{position:sticky;bottom:0;z-index:5}' +
     'dialog{position:fixed;inset:0;margin:0;border:0;padding:0;z-index:9;background:rgba(0,0,0,.5);justify-content:center}' +
-    'img{max-width:100%;background:#ddd;min-width:1.5rem;min-height:1.5rem}' +
+    'img{max-width:100%;background:#ddd;min-width:1.5rem;min-height:1.5rem}svg{flex:none;max-width:100%}' +
     'fieldset{border:1px solid #BDBDBD;border-radius:.4rem;padding:.5rem}';
   function frame(html, dark) {
+    if (window.nlIcons) html = window.nlIcons(html);
     var bg = dark ? '#0D1117' : '#fff';
     return '<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="' + (dark ? 'dark' : 'light') + '">' +
       '<style>' + BASE + 'html{background:' + bg + '}</style></head><body>' + html + '</body></html>';
@@ -485,7 +486,7 @@
 
   // ---------- header buttons ----------
   var ex = $('ex');
-  var EXDIR = 'exemplos/';
+  var EXDIR = 'pad/exemplos/';
   var DEFAULT_FILES = ['screen.nl', 'theme.css', 'data.json'];
   var catalog = [];
   function okName(n) { return typeof n === 'string' && /^[\w.\-\/]+\.(nl|css|json)$/i.test(n) && n.indexOf('..') < 0 && n.charAt(0) !== '/'; }

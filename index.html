@@ -48,7 +48,7 @@
     </div>
     <div class="splitter" id="split" title="Drag to resize"></div>
     <div class="pane pv">
-      <div class="pvh"><span>Preview (approximate, the real result is native views)</span></div>
+      <div class="pvh"><span>Preview (approximate, the real result is native views)</span><span id="auto" class="eng"></span></div>
       <div class="stage"><div class="phone"><iframe id="fr" title="Preview" sandbox=""></iframe></div></div>
     </div>
   </div>
@@ -56,6 +56,7 @@
 <footer class="status" translate="no">
   <span class="si first"><span id="sv" class="sv" translate="no"></span></span>
   <span class="si" id="pb">0 problems</span>
+  <button class="si" id="fill" type="button" hidden></button>
   <span class="sp"></span>
   <span id="eng" class="si eng"></span>
   <span class="si" id="pos">Ln 1, Col 1</span>
@@ -74,8 +75,10 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 <script src="pad/nlweb.js"></script>
+<script src="pad/auto.js"></script>
 <script src="pad/icons.js"></script>
 <script src="pad/editor.js"></script>
 <script src="pad/ui.js"></script>
+<script src="pad/vars.js"></script>
 </body>
 </html>

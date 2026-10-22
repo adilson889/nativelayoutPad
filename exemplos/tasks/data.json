@@ -1,0 +1,22 @@
+{
+  "pending": 2,
+  "done": 1,
+  "total": 3,
+  "percent": 33,
+  "filter": "all",
+  "empty": "Nothing to do.",
+  "shown": [
+    {
+      "title": "Test nativelayout",
+      "done": true
+    },
+    {
+      "title": "Write the documentation",
+      "done": false
+    },
+    {
+      "title": "Call Ana",
+      "done": false
+    }
+  ]
+}

@@ -6,6 +6,8 @@
 
 <p><a href="https://nativelayoutpad.vercel.app/"><strong>Open the online editor</strong></a> &middot; <a href="https://github.com/getnativelayout/nativelayout">nativelayout</a> &middot; <a href="https://github.com/getnativelayout/nativelayout/blob/main/SPEC.md">Specification</a></p>
 
+
+
 </div>
 
 <br>
@@ -13,6 +15,13 @@
 <p align="center">
   <a href="https://nativelayoutpad.vercel.app/">
     <img src="pad/app-icons/editor.jpg" alt="NativeLayoutPad: code, data and live preview" width="100%">
+  </a>
+</p>
+<hr/>
+
+<p align="center">
+  <a href="https://nativelayoutpad.vercel.app/">
+    <img src="pad/app-icons/ed.jpg" alt="NativeLayoutPad: code, data and live preview" width="100%">
   </a>
 </p>
 

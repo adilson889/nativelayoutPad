@@ -1,7 +1,7 @@
 /* sw.js - service worker do NativeLayoutPad: funciona offline.
    Tem de ficar na raiz (junto do index.html) para controlar a pagina toda.
    Ao mudar ficheiros do pad, sobe a versao em CACHE para forcar a actualizacao. */
-var CACHE = 'nlpad-v1';
+var CACHE = 'nlpad-v2';
 var CORE = [
   './', 'index.html', 'manifest.webmanifest',
   'pad/nlweb.js', 'pad/editor.js', 'pad/ui.js', 'pad/icons.js', 'pad/auto.js', 'pad/vars.js', 'pad/pwa.js',

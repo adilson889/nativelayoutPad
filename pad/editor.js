@@ -436,12 +436,47 @@
     'button{border:0;background:#E5E7EB;font:inherit;padding:.6rem;border-radius:.4rem}' +
     'input,textarea{font:inherit;border:1px solid #ccc;padding:.6rem;border-radius:.4rem;min-width:0}' +
     'input[type=checkbox]{width:1.3rem;height:1.3rem}' +
-    'header{position:sticky;top:0;z-index:5;flex-direction:row;align-items:center}footer{position:sticky;bottom:0;z-index:5}' +
+    'header{position:sticky;top:0;z-index:5;flex-direction:row;align-items:center}' +
+    'footer{position:sticky;bottom:0;z-index:5;flex-direction:row;justify-content:center;align-items:center}' +
+    'footer[data-dock=top]{position:fixed;top:0;left:0;right:0;bottom:auto}' +
+    'footer[data-dock=left]{position:fixed;left:0;top:50%;transform:translateY(-50%);max-height:100%}' +
+    'footer[data-dock=right]{position:fixed;right:0;top:50%;transform:translateY(-50%);max-height:100%}' +
+    'footer[data-dock=center]{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);max-height:100%}' +
+    'footer[data-dock=bottom]{position:fixed;bottom:0;left:0;right:0}' +
     'dialog{position:fixed;inset:0;margin:0;border:0;padding:0;z-index:9;background:rgba(0,0,0,.5);justify-content:center}' +
     'img{max-width:100%;background:#ddd;min-width:1.5rem;min-height:1.5rem}svg{flex:none;max-width:100%}' +
-    'fieldset{border:1px solid #BDBDBD;border-radius:.4rem;padding:.5rem}';
+    'fieldset{border:1px solid #BDBDBD;border-radius:.4rem;padding:.5rem}' +
+    'progress{-webkit-appearance:none;appearance:none;display:block;border:0;height:.5rem;border-radius:999px;background:#E0E0E0;color:#2F81F7;overflow:hidden;width:auto}' +
+    'progress::-webkit-progress-bar{background:transparent}' +
+    'progress::-webkit-progress-value{background:currentColor;transition:width .3s cubic-bezier(.25,.1,.35,1)}' +
+    'progress::-moz-progress-bar{background:currentColor}' +
+    'progress:indeterminate{background-image:linear-gradient(90deg,currentColor 0,currentColor 100%);background-size:40% 100%;background-repeat:no-repeat;animation:nlbar 1.4s cubic-bezier(.42,0,.58,1) infinite}' +
+    '@keyframes nlbar{from{background-position-x:-66.67%}to{background-position-x:166.67%}}' +
+    '@keyframes nlspin{to{transform:rotate(360deg)}}' +
+    'progress[circular]{width:2rem;height:2rem;border-radius:50%;background:conic-gradient(currentColor var(--p,0%),#E0E0E0 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px));mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))}' +
+    'progress[circular]::-webkit-progress-bar,progress[circular]::-webkit-progress-value{background:transparent}' +
+    'progress[circular]::-moz-progress-bar{background:transparent}' +
+    'progress[circular]:indeterminate{background:conic-gradient(currentColor 0 25%,#E0E0E0 0);animation:nlspin 1s linear infinite}';
+  // the preview is a browser: `dock` and the value of a circular <progress> become attributes and variables for the CSS above
+  function previewExtras(html) {
+    html = html.replace(/<footer\b([^>]*)>/gi, function (m, a) {
+      var d = /dock\s*:\s*(bottom|top|left|right|center)/i.exec(a);
+      return d ? '<footer' + a + ' data-dock="' + d[1].toLowerCase() + '">' : m;
+    });
+    return html.replace(/<progress\b([^>]*)>/gi, function (m, a) {
+      if (!/\bcircular\b/.test(a)) return m;
+      var v = /\bvalue="([^"]*)"/.exec(a), mx = /\bmax="([^"]*)"/.exec(a);
+      if (!v) return m;
+      var p = parseFloat(v[1]) / (mx ? parseFloat(mx[1]) : 1) * 100;
+      if (isNaN(p)) return m;
+      p = Math.max(0, Math.min(100, p));
+      var prop = '--p:' + p + '%;';
+      return /\bstyle="/.test(a) ? '<progress' + a.replace(/\bstyle="/, 'style="' + prop) + '>' : '<progress' + a + ' style="' + prop + '">';
+    });
+  }
   function frame(html, dark) {
     if (window.nlIcons) html = window.nlIcons(html);
+    html = previewExtras(html);
     var bg = dark ? '#0D1117' : '#fff';
     return '<!doctype html><html><head><meta charset="utf-8"><meta name="color-scheme" content="' + (dark ? 'dark' : 'light') + '">' +
       '<style>' + BASE + 'html{background:' + bg + '}</style></head><body>' + html + '</body></html>';
